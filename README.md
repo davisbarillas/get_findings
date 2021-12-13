@@ -1,1 +1,2 @@
 # get_findings
+This script requires your SHIFTLEFT_ORG_ID and SHIFTLEFT_ACCESS_TOKEN. When run the script checks the List Org Findings request (https://docs.shiftleft.io/api/#operation/ListOrgFindings) page by page. It returns the page number of the API request as well as any apps that contain a package with "log4j". You can then check the specific page via the API for more details on how the app is using log4j.
