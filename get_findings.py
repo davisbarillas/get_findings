@@ -111,38 +111,26 @@ class SLAPIClient:
         return handle_success(resp)
 
     def list_findings(self, page = "1"):
-        #resp = self._do_get("findings?per_page=249&type=package")
         return self._do_get(f"findings?page={page}&per_page=249&type=package")
 
 
 def main():
     api_v4 = SLAPIClient(SHIFTLEFT_ACCESS_TOKEN, SHIFTLEFT_ORG_ID)
-    #m = ["1","2","3","4","5","6","7"]
     page = 1
-    #for n in m:
     while True:
         findings = api_v4.list_findings(page)
         if "findings" not in findings:
             break
-        #print(findings)
         add_to_findings = []
         myList = []
         search = "log4j"
         for key, value in findings.items():
-            #print(key)
             if key == "findings":
-                #print("true")
                 find = value
-                #print(find)
                 for x in find:
                     app = x.get("app")
-                    #print(x)
-                    #print(app)
                     for x,y in x.items():
-                        #print(x,y)
                         if search in y:
-                            #app == x.get("app")
-                            #print(x,y,app)
                             myList.append(app)
                             for word in myList:
                                 if word not in add_to_findings:
