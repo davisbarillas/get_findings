@@ -135,7 +135,7 @@ def main():
                             for word in myList:
                                 if word not in add_to_findings:
                                     add_to_findings.append(app)
-        print(add_to_findings)
+        print(add_to_findings, page)
         page += 1
 
 
