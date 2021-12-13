@@ -117,10 +117,13 @@ class SLAPIClient:
 
 def main():
     api_v4 = SLAPIClient(SHIFTLEFT_ACCESS_TOKEN, SHIFTLEFT_ORG_ID)
-    m = ["1","2","3","4","5","6","7"]
+    #m = ["1","2","3","4","5","6","7"]
     page = 1
-    for n in m:
+    #for n in m:
+    while True:
         findings = api_v4.list_findings(page)
+        if "findings" not in findings:
+            break
         #print(findings)
         add_to_findings = []
         myList = []
