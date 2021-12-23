@@ -2,6 +2,8 @@
 import json
 import requests
 import os
+from pprint import pprint
+from pprint import pformat
 
 try:
     SHIFTLEFT_ORG_ID = os.environ["SHIFTLEFT_ORG_ID"]
@@ -110,34 +112,30 @@ class SLAPIClient:
         handle_status_code(resp)
         return handle_success(resp)
 
-    def list_findings(self, page = "1"):
-        return self._do_get(f"findings?page={page}&per_page=249&type=package")
+    def list_findings(self):
+        return self._do_get(f"findings?search=log4j&search=cve")
 
 
 def main():
     api_v4 = SLAPIClient(SHIFTLEFT_ACCESS_TOKEN, SHIFTLEFT_ORG_ID)
-    page = 1
-    while True:
-        findings = api_v4.list_findings(page)
-        if "findings" not in findings:
-            break
-        add_to_findings = []
-        myList = []
-        search = "log4j"
-        for key, value in findings.items():
-            if key == "findings":
-                find = value
-                for x in find:
-                    app = x.get("app")
-                    for x,y in x.items():
-                        if search in y:
-                            myList.append(app)
-                            for word in myList:
-                                if word not in add_to_findings:
-                                    add_to_findings.append(app)
-        print(add_to_findings, page)
-        page += 1
-
+    findings = api_v4.list_findings()
+    print("\n")
+    pprint(f"Found log4j in the following applications:")
+    for key, value in findings.items():
+        if key == "findings":
+            find = value
+            for x in find:
+                app = x.get("app")
+                details = x.get("details")
+                for key, value in details.items():
+                    if key == "dependency":
+                        depend = value
+                        for key, value in depend.items():
+                            if key == "version":
+                                version = value
+                            if key == "artifact_id":
+                                artifact = value
+                        print("    ",app, "-", artifact, version)
 
 
 if __name__ == "__main__":
