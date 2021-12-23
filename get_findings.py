@@ -121,7 +121,7 @@ def main():
     findings = api_v4.list_findings()
     app_list = []
     print("\n")
-    pprint(f"Found log4j in the following applications:")
+    print("Found log4j in the following applications:")
     for key, value in findings.items():
         if key == "findings":
             find = value
@@ -139,6 +139,7 @@ def main():
                                 if key == "artifact_id":
                                     artifact = value
                             print("    ",app, "-", artifact, version)
+                            
 
 
 if __name__ == "__main__":
