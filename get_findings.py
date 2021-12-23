@@ -119,6 +119,7 @@ class SLAPIClient:
 def main():
     api_v4 = SLAPIClient(SHIFTLEFT_ACCESS_TOKEN, SHIFTLEFT_ORG_ID)
     findings = api_v4.list_findings()
+    app_list = []
     print("\n")
     pprint(f"Found log4j in the following applications:")
     for key, value in findings.items():
@@ -126,16 +127,18 @@ def main():
             find = value
             for x in find:
                 app = x.get("app")
-                details = x.get("details")
-                for key, value in details.items():
-                    if key == "dependency":
-                        depend = value
-                        for key, value in depend.items():
-                            if key == "version":
-                                version = value
-                            if key == "artifact_id":
-                                artifact = value
-                        print("    ",app, "-", artifact, version)
+                if app not in app_list:
+                    app_list.append(app)
+                    details = x.get("details")
+                    for key, value in details.items():
+                        if key == "dependency":
+                            depend = value
+                            for key, value in depend.items():
+                                if key == "version":
+                                    version = value
+                                if key == "artifact_id":
+                                    artifact = value
+                            print("    ",app, "-", artifact, version)
 
 
 if __name__ == "__main__":
